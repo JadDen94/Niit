@@ -293,7 +293,29 @@ left:71rem;
 
 </div>
 
+<script>
+  document.addEventListener('keydown', (event) => {
+  // 1. Block F12
+  if (event.key === 'F12') {
+    event.preventDefault();
+  }
 
+  // 2. Block Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J (Windows/Linux)
+  // or Cmd+Opt+I, Cmd+Opt+C, Cmd+Opt+J (Mac)
+  if (
+    (event.ctrlKey || event.metaKey) && 
+    (event.shiftKey || event.altKey) && 
+    ['I', 'C', 'J', 'i', 'c', 'j'].includes(event.key)
+  ) {
+    event.preventDefault();
+  }
+
+  // 3. Block Ctrl+U or Cmd+U (View Source)
+  if ((event.ctrlKey || event.metaKey) && ['U', 'u'].includes(event.key)) {
+    event.preventDefault();
+  }
+});
+
+</script>
 </body>
-
 </html>
