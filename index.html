@@ -294,28 +294,41 @@ left:71rem;
 </div>
 
 <script>
-  document.addEventListener('keydown', (event) => {
-  // 1. Block F12
-  if (event.key === 'F12') {
-    event.preventDefault();
-  }
-
-  // 2. Block Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J (Windows/Linux)
-  // or Cmd+Opt+I, Cmd+Opt+C, Cmd+Opt+J (Mac)
-  if (
-    (event.ctrlKey || event.metaKey) && 
-    (event.shiftKey || event.altKey) && 
-    ['I', 'C', 'J', 'i', 'c', 'j'].includes(event.key)
-  ) {
-    event.preventDefault();
-  }
-
-  // 3. Block Ctrl+U or Cmd+U (View Source)
-  if ((event.ctrlKey || event.metaKey) && ['U', 'u'].includes(event.key)) {
-    event.preventDefault();
-  }
+// 1. Block the right-click context menu
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
 });
 
+// 2. Block developer tool shortcuts (Windows, Linux, and macOS)
+document.addEventListener('keydown', function(e) {
+    // Check if Ctrl (Windows/Linux) or Cmd (macOS) is pressed
+    const isModifierPressed = e.ctrlKey || e.metaKey;
+
+    // Disable F12
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+
+    // Disable Ctrl+Shift+I / Cmd+Option+I (Inspect) 
+    // and Ctrl+Shift+J / Cmd+Option+J (Console)
+    if (isModifierPressed && e.shiftKey && (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'j')) {
+        e.preventDefault();
+        return false;
+    }
+
+    // Disable Ctrl+U / Cmd+Option+U (View Source)
+    if (isModifierPressed && e.key.toLowerCase() === 'u') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable macOS specific Cmd+Option+C (Elements)
+    if (e.metaKey && e.altKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        return false;
+    }
+});
 </script>
 </body>
 </html>
